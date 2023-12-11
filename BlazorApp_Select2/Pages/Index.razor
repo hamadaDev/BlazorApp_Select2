@@ -1,0 +1,47 @@
+﻿@page "/"
+@inject IJSRuntime _js
+
+<PageTitle>Index</PageTitle>
+<h1>Hello, world!</h1>
+
+
+<div>
+    <Select2 DataList="@options" Selected_Value="@ValueSelected" Selected_ValueChanged="test01" />
+    <p>
+        the out selected value is :  @ValueSelected
+    </p>
+    <hr />
+
+    <Select2 DataList="@options" @bind-Selected_Value="ValueSelected02" />
+    <p>
+        the out selected value is :  @ValueSelected02
+    </p>
+    <hr />
+</div>
+
+@code {
+
+    public string? ValueSelected { get; set; }
+    public string? ValueSelected02 { get; set; }
+    List<Data_SelectOptions> options;
+
+    protected override void OnInitialized()
+    {
+        options = new List<Data_SelectOptions>
+        {
+            new Data_SelectOptions { ID = "1", Text = "Jones" },
+            new Data_SelectOptions { ID = "2", Text = "Smith" },
+            new Data_SelectOptions { ID = "3", Text = "Bender" },
+            new Data_SelectOptions { ID = "4", Text = "Baggio" },
+            new Data_SelectOptions { ID = "5", Text = "Allen" },
+            new Data_SelectOptions { ID = "6", Text = "Biggs" },
+            new Data_SelectOptions { ID = "7", Text = "Randall" },
+            new Data_SelectOptions { ID = "8", Text = "Anderson" },
+        };
+    }
+
+    void test01(string? value)
+    {
+        ValueSelected = value;
+    }
+}
