@@ -6,7 +6,7 @@
 
 
 <div>
-    <Select2 DataList="@options" Selected_Value="@ValueSelected" Selected_ValueChanged="test01" />
+    <Select2 DataList="@options" Selected_Value="@ValueSelected" Selected_ValueChanged="@((string value)=>{ValueSelected = value;})" />
     <p>
         the out selected value is :  @ValueSelected
     </p>
@@ -20,9 +20,9 @@
 </div>
 
 @code {
-
     public string? ValueSelected { get; set; }
-    public string? ValueSelected02 { get; set; }
+    public long? ValueSelected02 { get; set; }
+    
     List<Data_SelectOptions> options;
 
     protected override void OnInitialized()
@@ -40,8 +40,5 @@
         };
     }
 
-    void test01(string? value)
-    {
-        ValueSelected = value;
-    }
+   
 }

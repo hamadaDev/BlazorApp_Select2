@@ -1,4 +1,5 @@
-﻿@inject IJSRuntime _js
+﻿@typeparam T
+@inject IJSRuntime _js
 
 <select id="@id" @bind="Selected_Value" class="form-control">
     <option value=""> -- أختر -- </option>
@@ -13,11 +14,11 @@
 
 @code {
     [Parameter]
-    public string? Selected_Value { get; set; }
+    public T Selected_Value { get; set; }
     [Parameter]
     public List<Data_SelectOptions> DataList { get; set; } = new List<Data_SelectOptions>();
     [Parameter]
-    public EventCallback<string?> Selected_ValueChanged { get; set; }
+    public EventCallback<T> Selected_ValueChanged { get; set; }
 
     private string id;
 
@@ -35,14 +36,31 @@
     }
 
     [JSInvokable]
-    public void OnSelect2Change(string selectedValue)
+    public void OnSelect2Change(string? selectedValue)
     {
         if (string.IsNullOrEmpty(selectedValue))
         {
-            Selected_Value = null;
+            Selected_Value = default(T);
         }
         else
-            Selected_Value = selectedValue;
+        {
+            if (typeof(T) == typeof(int?))
+            {
+                Selected_Value = (T)(object)(int.TryParse(selectedValue, out var intValue) ? (int?)intValue : null);
+            }
+            else if (typeof(T) == typeof(long?))
+            {
+                Selected_Value = (T)(object)(long.TryParse(selectedValue, out var longValue) ? (long?)longValue : null);
+            }
+            else if (typeof(T) == typeof(decimal?))
+            {
+                Selected_Value = (T)(object)(decimal.TryParse(selectedValue, out var decimalValue) ? (decimal?)decimalValue : null);
+            }
+            else
+            {
+                Selected_Value = (T)Convert.ChangeType(selectedValue, typeof(T));
+            }
+        }
 
         Selected_ValueChanged.InvokeAsync(Selected_Value);
         InvokeAsync(() => StateHasChanged());
